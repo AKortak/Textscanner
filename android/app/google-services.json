@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "467713590749",
+    "project_id": "hrw-textscanner",
+    "storage_bucket": "hrw-textscanner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467713590749:android:30a604fd0a69e3b4c02234",
+        "android_client_info": {
+          "package_name": "alikortak.hrw_textscanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467713590749-7e7gmcj5q7pssd3pco9c6c69am0dggk1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBojXB4j-ruWiTrH46GIyQK8CInyBQ9iTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467713590749-7e7gmcj5q7pssd3pco9c6c69am0dggk1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
