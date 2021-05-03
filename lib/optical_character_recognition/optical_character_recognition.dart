@@ -8,8 +8,11 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
+import 'package:hrw_textscanner/objects/ScanObject.dart';
+import 'package:hrw_textscanner/sqflite/Database.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PictureScanner extends StatefulWidget {
@@ -22,9 +25,20 @@ class PictureScanner extends StatefulWidget {
 class _PictureScannerState extends State<PictureScanner> {
   File _imageFile;
   Size _imageSize;
-  dynamic _scanResults;
   VisionText visionText;
   String textAsString = "";
+  String title;
+  TextEditingController titleController;
+  TextEditingController scannedTextController;
+  CollectionReference collectionReference = FirebaseFirestore.instance.collection("ScanObject");
+  bool _validate = false;
+
+  @override
+  void initState() {
+    titleController = TextEditingController();
+
+    super.initState();
+  }
 
   final TextRecognizer _recognizer = FirebaseVision.instance.textRecognizer();
 
@@ -33,11 +47,8 @@ class _PictureScannerState extends State<PictureScanner> {
       _imageFile = null;
       _imageSize = null;
     });
-
     final PickedFile pickedImage = await ImagePicker().getImage(source: ImageSource.gallery);
-
     final File imageFile = File(pickedImage.path);
-
     setState(() {
       _imageFile = imageFile;
     });
@@ -52,7 +63,6 @@ class _PictureScannerState extends State<PictureScanner> {
 
   Future<void> _getImageSize(File imageFile) async {
     final Completer<Size> completer = Completer<Size>();
-
     final Image image = Image.file(imageFile);
     image.image.resolve(const ImageConfiguration()).addListener(
       ImageStreamListener((ImageInfo info, bool _) {
@@ -74,60 +84,149 @@ class _PictureScannerState extends State<PictureScanner> {
     final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(imageFile);
     dynamic results;
     results = await _recognizer.processImage(visionImage);
-    print(results);
+    //print(results);
     for (final TextBlock block in results.blocks) {
       textAsString = textAsString + block.text;
     }
-    print(textAsString);
-  }
-
-  CustomPaint _buildResults(Size imageSize, dynamic results) {
-    CustomPainter painter;
-
-    return CustomPaint(
-      painter: painter,
-    );
+    setState(() {});
+    //print(textAsString);
   }
 
   Widget showText() {
     return Text(textAsString);
   }
 
-  Widget _buildImage() {
-    return Container(
-      constraints: const BoxConstraints.expand(),
+  validationSuccessfulLokal() {
+    DB.insert(
+      DB.scanHistory,
+      ScanObject(title: titleController.text, date: DateTime.now(), textAsString: scannedTextController.text).toMapForLocalDb(),
+    );
+    _validate = false;
+  }
 
-      // image: DecorationImage(image: Image.file(_imageFile).image),
+  validationSuccessfulCloud() {
+    collectionReference.add(
+      ScanObject(title: titleController.text, date: DateTime.now(), textAsString: scannedTextController.text).toMapForCloudDb(),
+    );
+    _validate = false;
+  }
 
-      child: Column(
-        children: [
-          Container(
-            height: 250,
-            width: 250,
-            decoration: BoxDecoration(
-              image: DecorationImage(image: Image.file(_imageFile).image),
-            ),
-          ),
-          SizedBox(
-            height: 50,
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 350,
-                width: MediaQuery.of(context).size.width,
-                color: Colors.white,
-                child: SingleChildScrollView(
-                  child: Text(
-                    textAsString,
-                    textAlign: TextAlign.center,
-                  ),
+  Widget _buildContainerAfterImageScanned() {
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus.unfocus();
+        }
+      },
+      child: Container(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ListView(
+            // mainAxisAlignment: MainAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  height: 180,
+                  width: 180,
+                  child: InteractiveViewer(
+                      panEnabled: false, // Set it to false
+                      boundaryMargin: EdgeInsets.all(100),
+                      minScale: 0.5,
+                      maxScale: 2,
+                      child: Image.file(_imageFile)),
                 ),
               ),
-            ),
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                "Titel: ",
+                textAlign: TextAlign.start,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 55,
+                child: Center(
+                  child: TextField(
+                    onChanged: (val) {
+                      title = val;
+                    },
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.only(left: 15, bottom: 0, top: 0, right: 15),
+                      errorText: _validate ? 'Value Can\'t Be Empty' : null,
+                    ),
+                    maxLines: 1,
+                    controller: titleController,
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                "Scann-Ergebnis: ",
+                textAlign: TextAlign.start,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                height: 250,
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.only(left: 15, bottom: 0, top: 0, right: 15),
+                  ),
+                  maxLines: 30,
+                  controller: scannedTextController = TextEditingController(text: textAsString),
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextButton(
+                    child: Text(
+                      "Speichern lokal",
+                      textAlign: TextAlign.start,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        titleController.text.isEmpty ? _validate = true : validationSuccessfulLokal();
+                      });
+                    },
+                  ),
+                  TextButton(
+                    child: Text(
+                      "Speichern auf Cloud",
+                      textAlign: TextAlign.start,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        titleController.text.isEmpty ? _validate = true : validationSuccessfulCloud();
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -136,13 +235,18 @@ class _PictureScannerState extends State<PictureScanner> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('HRW-Textscanner'),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'HRW-Textscanner',
+          style: TextStyle(color: Colors.black),
+        ),
       ),
-      body: _imageFile == null ? const Center(child: Text('No image selected.')) : _buildImage(),
+      body: _imageFile == null ? Container(color: Colors.white, child: Center(child: Text('No image selected.'))) : _buildContainerAfterImageScanned(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.lightBlueAccent,
         onPressed: _getAndScanImage,
-        tooltip: 'Pick Image',
-        child: const Icon(Icons.add_a_photo),
+        child: Icon(Icons.add_a_photo),
       ),
     );
   }
@@ -150,7 +254,6 @@ class _PictureScannerState extends State<PictureScanner> {
   @override
   void dispose() {
     _recognizer.close();
-
     super.dispose();
   }
 }

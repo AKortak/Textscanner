@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hrw_textscanner/Login/SettingsScreen.dart';
+import 'package:hrw_textscanner/firebase/CloudDbScreen.dart';
 import 'package:hrw_textscanner/optical_character_recognition/optical_character_recognition.dart';
+import 'package:hrw_textscanner/sqflite/LocalDbScreen.dart';
 import 'package:provider/provider.dart';
 
 import 'authentication_service.dart';
@@ -24,8 +26,10 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return PictureScanner();
       case 1:
-        return SizedBox();
+        return CloudDbScreen();
       case 2:
+        return LocalDbScreen();
+      case 3:
         return SettingsScreen();
     }
   }
@@ -35,19 +39,27 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: BottomNavigationBar(
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          iconSize: 26,
+          type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.lightBlueAccent,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Option 1',
+              icon: Icon(Icons.home_outlined),
+              label: 'Scanner',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.business),
-              label: 'Option 2',
+              icon: Icon(Icons.cloud_outlined),
+              label: 'Cloud',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.save_outlined),
+              label: 'Local',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings_outlined),
-              label: 'Einstellungen',
+              label: 'Settings',
             ),
           ],
           currentIndex: _selectedIndex,

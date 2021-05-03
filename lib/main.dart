@@ -2,14 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:hrw_textscanner/sqflite/Database.dart';
 import 'package:provider/provider.dart';
-
 import 'Login/authentication_service.dart';
 import 'Login/home_page.dart';
 import 'Login/sign_in_page.dart';
 
+//hallo
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await DB.init();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
