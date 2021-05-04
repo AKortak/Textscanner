@@ -1,16 +1,12 @@
-# hrw_textscanner
+# Mobile Textrecognition
 
-A new Flutter application.
+This is a OCR application based on the cross-platform-framework Flutter, which is used to automaticly recognize and identify characters in a given picture.
+The recognized text is then saved locally via sqflite and also stored in a Firestore database, which can be accessed by a Firebase login server.
+The text recognition itself is realised with FirebaseML.
 
-## Getting Started
+
+## Bla
 
 This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

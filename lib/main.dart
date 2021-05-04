@@ -14,6 +14,7 @@ Future<void> main() async {
   await DB.init();
   await Firebase.initializeApp();
   runApp(MyApp());
+  //Hello All :)
 }
 
 class MyApp extends StatelessWidget {
