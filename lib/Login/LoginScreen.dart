@@ -24,7 +24,7 @@ class LoginScreen extends StatelessWidget {
                 labelText: "Password",
               ),
             ),
-            RaisedButton(
+            TextButton(
               onPressed: () {
                 context.read<Authentification>().signIn(
                       email: emailController.text.trim(),
