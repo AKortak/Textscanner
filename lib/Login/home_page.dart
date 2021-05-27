@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
               label: 'Local',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
+              icon: Icon(Icons.settings_outlined, key: ValueKey("SettingsButton")),
               label: 'Settings',
             ),
           ],

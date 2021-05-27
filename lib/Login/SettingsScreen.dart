@@ -13,6 +13,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Center(
       child: Container(
         child: TextButton(
+          key: ValueKey("LogoutButton"),
           onPressed: () {
             context.read<AuthenticationService>().signOut();
           },
