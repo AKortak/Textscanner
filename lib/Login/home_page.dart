@@ -46,15 +46,15 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.lightBlueAccent,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
+              icon: Icon(Icons.home_outlined, key: ValueKey("ScannerButton")),
               label: 'Scanner',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.cloud_outlined),
+              icon: Icon(Icons.cloud_outlined, key: ValueKey("CloudButton")),
               label: 'Cloud',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.save_outlined),
+              icon: Icon(Icons.save_outlined, key: ValueKey("LocalButton")),
               label: 'Local',
             ),
             BottomNavigationBarItem(
