@@ -44,3 +44,8 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+unit_tests/firebase_test/Auth_Test2.dart
+unit_tests/firebase_test/Authentification_Test.dart
+unit_tests/firebase_test/realAuthTest.dart
+pubspec.lock
+pubspec.lock
