@@ -246,7 +246,7 @@ class _PictureScannerState extends State<PictureScanner> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.lightBlueAccent,
         onPressed: _getAndScanImage,
-        child: Icon(Icons.add_a_photo),
+        child: Icon(Icons.add_a_photo, key: ValueKey('hommeButton')), // hinzugefügt
       ),
     );
   }
