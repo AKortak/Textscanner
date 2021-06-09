@@ -40,26 +40,26 @@ void main() {
       }
     });
 
-    // test("login page test", () async {
-    //   driver.tap(emailTextfield);
-    //   driver.enterText("ali@hrw.de");
-    //   driver.tap(passwordTextfield);
-    //   driver.enterText("qwert123");
-    //   driver.tap(loginButton);
-    //   expect(await driver.getText(emailTextfield), "ali@hrw.de");
-    //   expect(await driver.getText(passwordTextfield), "qwert123");
-    //   driver.tap(loginButton);
-    //   sleep(Duration(seconds: 5));
-    //
-    //   driver.tap(cloudSaveButtton);
-    //   sleep(Duration(seconds: 5));
-    //   driver.tap(localSaveButton);
-    //   sleep(Duration(seconds: 5));
-    //   driver.tap(settingsButton);
-    //   sleep(Duration(seconds: 2));
-    //   driver.tap(logoutButton);
-    //   sleep(Duration(seconds: 5));
-    // });
+    test("login page test", () async {
+      driver.tap(emailTextfield);
+      driver.enterText("ali@hrw.de");
+      driver.tap(passwordTextfield);
+      driver.enterText("qwert123");
+      driver.tap(loginButton);
+      expect(await driver.getText(emailTextfield), "ali@hrw.de");
+      expect(await driver.getText(passwordTextfield), "qwert123");
+      driver.tap(loginButton);
+      sleep(Duration(seconds: 5));
+
+      driver.tap(cloudSaveButtton);
+      sleep(Duration(seconds: 5));
+      driver.tap(localSaveButton);
+      sleep(Duration(seconds: 5));
+      driver.tap(settingsButton);
+      sleep(Duration(seconds: 2));
+      driver.tap(logoutButton);
+      sleep(Duration(seconds: 5));
+    });
 
     // test('Photo recognitation', () async {
     //   driver.tap(emailTextfield);
