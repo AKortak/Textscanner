@@ -26,10 +26,10 @@ void main() {
     FlutterDriver driver;
 
     setUpAll(() async {
-      final Map<String, String> envVars = Platform.environment;
-      final String adbPath = envVars['ANDROID_HOME'] + '/platform-tools/adb.exe';
-      await Process.run(adbPath, ['shell', 'pm', 'grant', 'alikortak.hrw_textscanner', 'android.permission.READ_EXTERNAL_STORAGE']);
-      await Process.run(adbPath, ['shell', 'pm', 'grant', 'alikortak.hrw_textscanner', 'android.permission.WRITE_EXTERNAL_STORAGE']);
+      // final Map<String, String> envVars = Platform.environment;
+      // final String adbPath = envVars['ANDROID_HOME'] + '/platform-tools/adb.exe';
+      // await Process.run(adbPath, ['shell', 'pm', 'grant', 'alikortak.hrw_textscanner', 'android.permission.READ_EXTERNAL_STORAGE']);
+      // await Process.run(adbPath, ['shell', 'pm', 'grant', 'alikortak.hrw_textscanner', 'android.permission.WRITE_EXTERNAL_STORAGE']);
       driver = await FlutterDriver.connect();
       await driver.waitUntilFirstFrameRasterized();
     });
