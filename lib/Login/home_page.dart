@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         bottomNavigationBar: BottomNavigationBar(
+          key: ValueKey("BottomNavigationBar"),
           showSelectedLabels: false,
           showUnselectedLabels: false,
           iconSize: 26,
@@ -46,7 +47,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.lightBlueAccent,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined, key: ValueKey("ScannerButton")),
+              icon: Icon(Icons.home_outlined, key: ValueKey("Scanner")),
               label: 'Scanner',
             ),
             BottomNavigationBarItem(

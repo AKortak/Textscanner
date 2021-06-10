@@ -11,6 +11,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/material.dart';
+import 'package:hrw_textscanner/gallery/galleryscreen.dart';
 import 'package:hrw_textscanner/objects/ScanObject.dart';
 import 'package:hrw_textscanner/sqflite/Database.dart';
 import 'package:image_picker/image_picker.dart';
@@ -32,6 +33,8 @@ class _PictureScannerState extends State<PictureScanner> {
   TextEditingController scannedTextController;
   CollectionReference collectionReference = FirebaseFirestore.instance.collection("ScanObject");
   bool _validate = false;
+  String justAText = "Hallo Derrick";
+  File imageFile;
 
   @override
   void initState() {
@@ -42,24 +45,25 @@ class _PictureScannerState extends State<PictureScanner> {
 
   final TextRecognizer _recognizer = FirebaseVision.instance.textRecognizer();
 
-  Future<void> _getAndScanImage() async {
-    setState(() {
-      _imageFile = null;
-      _imageSize = null;
-    });
-    final PickedFile pickedImage = await ImagePicker().getImage(source: ImageSource.gallery);
-    final File imageFile = File(pickedImage.path);
-    setState(() {
-      _imageFile = imageFile;
-    });
-
-    if (imageFile != null) {
-      await Future.wait([
-        _getImageSize(imageFile),
-        _scanImage(imageFile),
-      ]);
-    }
-  }
+  // Methode ersetzt durch eigenen GalleryScreen
+  // Future<void> _getAndScanImage() async {
+  //   setState(() {
+  //     _imageFile = null;
+  //     _imageSize = null;
+  //   });
+  //   final PickedFile pickedImage = await ImagePicker().getImage(source: ImageSource.gallery);
+  //   final File imageFile = File(pickedImage.path);
+  //   setState(() {
+  //     _imageFile = imageFile;
+  //   });
+  //
+  //   if (imageFile != null) {
+  //     await Future.wait([
+  //       _getImageSize(imageFile),
+  //       _scanImage(imageFile),
+  //     ]);
+  //   }
+  // }
 
   Future<void> _getImageSize(File imageFile) async {
     final Completer<Size> completer = Completer<Size>();
@@ -124,8 +128,6 @@ class _PictureScannerState extends State<PictureScanner> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Center(
                 child: Container(
@@ -244,9 +246,33 @@ class _PictureScannerState extends State<PictureScanner> {
       ),
       body: _imageFile == null ? Container(color: Colors.white, child: Center(child: Text('No image selected.'))) : _buildContainerAfterImageScanned(),
       floatingActionButton: FloatingActionButton(
+        key: ValueKey('ScannerButton'),
         backgroundColor: Colors.lightBlueAccent,
-        onPressed: _getAndScanImage,
-        child: Icon(Icons.add_a_photo, key: ValueKey('hommeButton')), // hinzugefügt
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MediaGrid(
+                      getImage: (val) async {
+                        imageFile = await val;
+
+                        setState(() {
+                          _imageFile = imageFile;
+                        });
+
+                        if (imageFile != null) {
+                          await Future.wait([
+                            _getImageSize(imageFile),
+                            _scanImage(imageFile),
+                          ]);
+                        }
+                      },
+                    )),
+          );
+        },
+        child: Icon(
+          Icons.add_a_photo,
+        ), // hinzugefügt
       ),
     );
   }
