@@ -20,11 +20,12 @@ class ScanObject {
   }
 
   factory ScanObject.fromJsonCloud(Map<String, dynamic> json) {
-    Timestamp myTimestamp = json["date"];
+    int myTimestamp = json["date"];
+    print("$myTimestamp hzuhuhuh");
     return ScanObject(
       title: json["title"],
       textAsString: json["textAsString"],
-      date: DateTime.fromMillisecondsSinceEpoch(myTimestamp.millisecondsSinceEpoch),
+      date: DateTime.fromMillisecondsSinceEpoch(myTimestamp),
     );
   }
 

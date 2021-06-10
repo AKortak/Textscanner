@@ -33,6 +33,7 @@ class _CloudDbScreenState extends State<CloudDbScreen> {
             }
             if (snapshot.connectionState == ConnectionState.done) {
               snapshot.data.docs.forEach((element) {
+                print(element.data());
                 scanObjectList.add(ScanObject.fromJsonCloud(element.data()));
               });
               return ListView.builder(
