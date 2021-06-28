@@ -14,9 +14,9 @@ void main() {
   group('Test correct Map creating in ScanObject class.', () {
     test('Test if toMapForLocalDB creates correct Map.', () {
       //given
-      ScanObject scanObject = ScanObject.fromJson(getValidLocalDbMap());
+      ScanObject scanObject = ScanObject.fromJson(getValidMap());
       Map<String, dynamic> scanObjectToMap = scanObject.toMapForLocalDb();
-      Map<String, dynamic> expectedMap = getValidLocalDbMap();
+      Map<String, dynamic> expectedMap = getValidMap();
 
       //when
       bool mapsEqual = mapEquals(scanObjectToMap, expectedMap);
@@ -27,14 +27,9 @@ void main() {
 
     test('Test if toMapForCloudDb creates correct Map.', () {
       //given
-      Map<String, dynamic> mapForScanObjectInit = {
-        "title": _testTitle,
-        "textAsString": _testText,
-        "date": Timestamp.fromDate(_testDateTime)
-      };
-      ScanObject scanObject = ScanObject.fromJsonCloud(mapForScanObjectInit);
+      ScanObject scanObject = ScanObject.fromJsonCloud(getValidMap());
       Map<String, dynamic> scanObjectToMap = scanObject.toMapForCloudDb();
-      Map<String, dynamic> expectedMap = getValidCloudDbMap();
+      Map<String, dynamic> expectedMap = getValidMap();
 
       //when
       bool mapsEqual = mapEquals(scanObjectToMap, expectedMap);
@@ -45,16 +40,7 @@ void main() {
   });
 }
 
-Map<String, dynamic> getValidLocalDbMap() {
-  Map<String, dynamic> map = {
-    "title": _testTitle,
-    "textAsString": _testText,
-    "date": _testDateTime.millisecondsSinceEpoch
-  };
-  return map;
-}
-
-Map<String, dynamic> getValidCloudDbMap() {
+Map<String, dynamic> getValidMap() {
   Map<String, dynamic> map = {
     "title": _testTitle,
     "textAsString": _testText,
