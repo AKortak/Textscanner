@@ -6,7 +6,7 @@ import 'Firebase_Operations.dart';
 class Authentification {
   final FirebaseAuth _firebaseAuth;
   FirestoreOperations db = new FirestoreOperations();
-  Authentification(this._firebaseAuth);
+  Authentification(this._firebaseAuth, {this.db});
 
   Stream<User> get authStateChanges => _firebaseAuth.authStateChanges();
 
@@ -17,7 +17,8 @@ class Authentification {
 
   Future<String> signIn({String email, String password}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
       return "Signed in";
     } on FirebaseAuthException catch (e) {
       return e.message;
@@ -32,7 +33,10 @@ class Authentification {
     DateTime selectedDate,
   }) async {
     try {
-      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: "$email", password: "$password").whenComplete(
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: "$email", password: "$password")
+          .whenComplete(
         () {
           getUserID().then(
             (value) => db.addUserToDB(

@@ -18,7 +18,8 @@ abstract class DB {
   }
 
   static void onCreate(Database db, int version) async {
-    await db.execute('CREATE TABLE $scanHistory (id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, textAsString STRING, date INTEGER)');
+    await db.execute(
+        'CREATE TABLE $scanHistory (id INTEGER PRIMARY KEY AUTOINCREMENT, title STRING, textAsString STRING, date INTEGER)');
   }
 
   static Future<List<Map<String, dynamic>>> query(String table) async {
