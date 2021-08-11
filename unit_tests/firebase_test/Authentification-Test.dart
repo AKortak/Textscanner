@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:hrw_textscanner/firebase/Authentification.dart';
 import 'package:test/test.dart';
 
-import '../MockFirebaseOperations.dart';
+import '../MockFirestoreOperations.dart';
 
 main() async {
   //setUp Framework

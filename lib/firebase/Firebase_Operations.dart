@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FirestoreOperations {
   FirestoreOperations();
-  var userCollection = FirebaseFirestore.instance.collection('User');
+  CollectionReference userCollection =
+      FirebaseFirestore.instance.collection('User');
 
   //Registration
   addUserToDB({
@@ -10,16 +11,23 @@ class FirestoreOperations {
     String userName,
     String gender,
     DateTime dateOfBirth,
-  }) {
+  }) async {
     Map<String, dynamic> demoData = {
       "Username": "$userName",
       "UserID": "$userID",
       "Gender": "$gender",
       "DateOfBirth": "$dateOfBirth",
     };
-    CollectionReference collectionReference = FirebaseFirestore.instance.collection("User");
-    collectionReference.doc(userID).set(demoData);
+    // CollectionReference collectionReference =
+    //     FirebaseFirestore.instance.collection('User');
+    await userCollection.doc(userID).set(demoData);
     //collectionReference.add(demoData);
+  }
+
+  deleteUserFromDB(String userID) async {
+    if (userID != null) {
+      await userCollection.doc(userID).delete();
+    }
   }
 
   addUserToDBOnSSOLogin({
@@ -30,8 +38,9 @@ class FirestoreOperations {
       "Username": "$userName",
       "UserID": "$userID",
     };
-    CollectionReference collectionReference = FirebaseFirestore.instance.collection("User");
-    collectionReference.doc(userID).set(demoData);
+    // CollectionReference collectionReference =
+    //     FirebaseFirestore.instance.collection('User');
+    userCollection.doc(userID).set(demoData);
   }
 
   checkIfUserAlreadyInDB(String userID) async {
