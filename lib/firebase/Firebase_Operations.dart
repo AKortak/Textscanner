@@ -33,14 +33,14 @@ class FirestoreOperations {
   addUserToDBOnSSOLogin({
     String userID,
     String userName,
-  }) {
+  }) async {
     Map<String, dynamic> demoData = {
       "Username": "$userName",
       "UserID": "$userID",
     };
     // CollectionReference collectionReference =
     //     FirebaseFirestore.instance.collection('User');
-    userCollection.doc(userID).set(demoData);
+    await userCollection.doc(userID).set(demoData);
   }
 
   checkIfUserAlreadyInDB(String userID) async {

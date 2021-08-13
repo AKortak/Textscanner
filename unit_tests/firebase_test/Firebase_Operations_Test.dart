@@ -12,19 +12,16 @@ main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  List<String> createdUsers = [];
   FirestoreOperations firestoreOperations = FirestoreOperations();
 
   group('Test class Firebase_Operations', () {
-    test('Test addUserToDB adds User to collection', () async {
+    test('Test addUserToDB adds User to DB', () async {
       //when
       await firestoreOperations.addUserToDB(
           userID: "Max",
           userName: "Max1",
           gender: "m",
           dateOfBirth: DateTime(2000, 01, 01));
-
-      createdUsers.add("Max");
 
       //then
       bool dbContainsNewUser;
@@ -38,6 +35,23 @@ main() async {
       expect(dbContainsNewUser, true);
     });
 
+    test('Test addUserToDBOnSSOLogin adds User to DB', () async {
+      //when
+      await firestoreOperations.addUserToDBOnSSOLogin(
+          userID: "Zim", userName: "Zimbo");
+
+      //then
+      bool dbContainsNewUser;
+      if (firestoreOperations.userCollection.doc("Zim") != null) {
+        dbContainsNewUser = true;
+      } else {
+        dbContainsNewUser = false;
+      }
+      firestoreOperations.deleteUserFromDB("Zim");
+
+      expect(dbContainsNewUser, true);
+    });
+
     test('Test deleteUserFromDb deletes a written User from Database.',
         () async {
       //given
@@ -46,7 +60,6 @@ main() async {
           userName: "Anne1",
           gender: "w",
           dateOfBirth: DateTime(2000, 01, 01));
-      createdUsers.add("Anne");
 
       //when
       firestoreOperations.deleteUserFromDB("Anne");
@@ -65,7 +78,6 @@ main() async {
       //when
       await firestoreOperations.addUserToDBOnSSOLogin(
           userID: "Mia", userName: "Mia1");
-      createdUsers.add("Mia");
 
       //then
       bool dbContainsNewUser;
