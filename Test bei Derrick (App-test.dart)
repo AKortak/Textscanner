@@ -1,0 +1,75 @@
+// Imports the Flutter Driver API.
+import 'dart:io';
+import 'package:path/path.dart';
+import 'dart:math';
+import 'package:flutter_driver/flutter_driver.dart';
+import 'package:test/test.dart';
+
+//flutter drive --target=test_driver/app.dart
+void main() {
+  group('Text-scanner App', () {
+    final emailTextfield = find.byValueKey('Email');
+    final passwordTextfield = find.byValueKey('Password');
+    final loginButton = find.byValueKey('Login');
+    final settingsButton = find.byValueKey('SettingsButton');
+    final logoutButton = find.byValueKey('LogoutButton');
+    final scannerButton = find.byValueKey('ScannerButton');
+    final cloudSaveButtton = find.byValueKey('CloudButton');
+    final localSaveButton = find.byValueKey('LocalButton');
+    final textfield = find.byValueKey("TheValueKey");
+    final listFinder = find.byValueKey("ListView");
+    final itemFinder = find.byValueKey("scanTitle: 0");
+
+    FlutterDriver driver;
+    
+/* /platform-tools/adb.exe */ permissions
+
+    setUpAll(() async {
+    final String adbPath = '/Users/derricksimo/Library/Android/sdk/platform-tools/adb'; 
+    await Process.run(adbPath, ['shell', 'pm', 'grant', 'alikortak.hrw_textscanner', 'android.permission.READ_EXTERNAL_STORAGE']);
+    await Process.run(adbPath, ['shell', 'pm', 'grant', 'alikortak.hrw_textscanner', 'android.permission.WRITE_EXTERNAL_STORAGE']);
+    driver = await FlutterDriver.connect();
+    });
+
+ // simple setUpAll() without permission 
+//   setUpAll(() async {
+//       driver = await FlutterDriver.connect();
+//       await driver.waitUntilFirstFrameRasterized();
+//  }); 
+
+    tearDownAll(() async {
+      if (driver != null) {
+        driver.close();
+      }
+    });
+
+    test("login page test", () async {
+      
+      sleep(Duration(seconds: 5));
+      driver.tap(emailTextfield);
+      driver.enterText("ali@hrw.de");
+      driver.tap(passwordTextfield);
+      driver.enterText("qwert123");
+      driver.tap(loginButton);
+      expect(await driver.getText(emailTextfield), "ali@hrw.de");
+      expect(await driver.getText(passwordTextfield), "qwert123");
+      driver.tap(loginButton);
+      sleep(Duration(seconds: 5));
+      driver.tap(scannerButton);
+      sleep(Duration(seconds:5));
+      await driver.tap(find.pageBack());
+      sleep(Duration(seconds: 5));
+      driver.tap(cloudSaveButtton);
+      sleep(Duration(seconds: 5));
+      driver.getText(itemFinder).then((value) => expect(value, 
+      'Prewview: 16:38AProduktnameOreos OriginalSupermarktRewe, Aldi Süd, KaisersVegan?'));
+      sleep(Duration(seconds: 5));
+      driver.tap(localSaveButton);
+      sleep(Duration(seconds: 5));
+      driver.tap(settingsButton);
+      sleep(Duration(seconds: 5));
+      driver.tap(logoutButton);
+      sleep(Duration(seconds: 5));
+    });
+  });
+}
