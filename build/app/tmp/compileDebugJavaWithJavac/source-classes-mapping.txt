@@ -1,0 +1,4 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+alikortak/hrw_textscanner/BuildConfig.java
+ alikortak.hrw_textscanner.BuildConfig
